@@ -1,0 +1,25 @@
+---
+.only-default: &only-default
+  only:
+    - master
+    - wip
+    - merge_requests
+    - tags
+
+shellcheck:
+  <<: *only-default
+  image: "alpine:latest"
+  before_script:
+  - "apk -q add shellcheck"
+  script:
+  - ".ci/shellcheck.sh"
+
+mr-settings:
+  only:
+    - merge_requests
+  image: "alpine:latest"
+  before_script:
+    - "apk -q add python3"
+  script:
+    - wget -q "https://gitlab.com/postmarketOS/ci-common/-/raw/master/check_mr_settings.py"
+    - python3 ./check_mr_settings.py
